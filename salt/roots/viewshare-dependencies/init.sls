@@ -49,3 +49,6 @@ virtualenv_install:
     - unless: which virtualenv
     - watch:
       - cmd: pip_install
+
+en_US.UTF-8:
+  locale.system

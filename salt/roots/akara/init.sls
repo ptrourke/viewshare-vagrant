@@ -90,8 +90,9 @@ akara_logrotate:
     - source: salt://akara/akara_logrotate
     - mode: 755
 
-rsyslog:
+akara_rsyslog:
   service:
+    - name: rsyslog
     - running
     - reload: True
     - watch:
