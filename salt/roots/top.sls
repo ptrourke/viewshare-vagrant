@@ -1,3 +1,4 @@
 base:
   '*':
-    - viewshare
+    - akara
+    - viewshare-dependencies

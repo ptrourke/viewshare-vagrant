@@ -4,7 +4,7 @@ system_dependencies:
       - autoconf
       - binutils-doc
       - bison
-      - build-essenential
+      - build-essential
       - csstidy
       - erlang
       - erlang-dev
@@ -49,18 +49,3 @@ virtualenv_install:
     - unless: which virtualenv
     - watch:
       - cmd: pip_install
-
-akara_group:
-  group.present:
-    - name: akara
-    - system: True
-
-akara_user:
-  user.present:
-    - name: akara
-    - shell: /bin/false
-    - system: True
-    - groups:
-      - akara
-    - require:
-      - group: akara

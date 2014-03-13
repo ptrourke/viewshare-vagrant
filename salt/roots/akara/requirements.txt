@@ -1,0 +1,11 @@
+html5lib
+httplib2
+python-dateutil
+simplejson
+feedparser
+xlrd
+--extra-index-url http://pypi.zepheira.com/releases/index/
+zen==0.12.5
+freemix-akara==4.0.0
+Amara==2.0.0a6
+Akara==2.0.0a4
