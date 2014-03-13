@@ -33,7 +33,8 @@ akara_user:
     - require:
       - user: akara
 
-akara_virtualenv:
-  virtualenv.managed:
-    - name: /opt/akara
-    - requirements: salt://akara/requirements.txt
+akara_conf:
+  file.managed:
+    - name: /opt/akara/akara.conf
+    - source: salt://akara/akara.conf
+    - template: jinja

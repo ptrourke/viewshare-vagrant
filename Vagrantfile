@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
 #  config.ssh.private_key_path = "/home/wamberg/.ssh/id_rsa"
   config.vm.box_url = "http://cloud-images.ubuntu.com/vagrant/raring/current/raring-server-cloudimg-i386-vagrant-disk1.box"
 
-  config.vm.synced_folder "salt/roots/", "/srv/salt/"
+  config.vm.synced_folder "salt/", "/srv/salt/"
 
   config.vm.network :forwarded_port, guest: 80, host: 8000
   config.vm.network :private_network, ip: "192.168.2.2"
