@@ -1,28 +1,28 @@
 system_dependencies:
   pkg.installed:
     - names:
-      - git-core
-      - python
-      - python-dev
-      - locales
-      - build-essenential
-      - binutils-doc
       - autoconf
-      - flex
+      - binutils-doc
       - bison
-      - mysql-server
-      - mysql-client
+      - build-essenential
+      - csstidy
+      - erlang
+      - erlang-dev
+      - flex
+      - git-core
+      - libmemcache-dev
       - libmysqlclient-dev
+      - locales
       - nginx
       - nginx-full
       - memcached
-      - libmemcache-dev
-      - erlang
-      - erlang-dev
-      - util-linux
-      - rabbitmq-server
-      - csstidy
+      - mysql-server
+      - mysql-client
+      - python
+      - python-dev
       - python-software-properties
+      - rabbitmq-server
+      - util-linux
 
 nodejs_repo:
   pkgrepo.managed:
@@ -37,3 +37,15 @@ nodejs_repo:
 
 nodejs:
   pkg.installed
+
+pip_install:
+  cmd.run:
+    - name: wget https://raw.github.com/pypa/pip/master/contrib/get-pip.py -O - | sudo python
+    - unless: which pip
+
+virtualenv_install:
+  cmd.wait:
+    - name: pip install virtualenv
+    - unless: which virtualenv
+    - watch:
+      - cmd: pip_install
