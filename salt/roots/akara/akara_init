@@ -1,0 +1,44 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: akara
+# Required-Start: 2 3 4 5
+# Required-Stop: 0 1 6
+# Default-Start: Starts Akara service
+# Default-Stop: Starts Akara service
+# Short-Description:
+# Description:
+### END INIT INFO
+
+APP_PATH=/opt/akara
+DAEMON=${APP_PATH}/bin/akara
+DAEMON_OPTS="-f ${APP_PATH}/akara.conf"
+RUN_AS=akara
+PID_FILE=${APP_PATH}/logs/akara.pid
+test -x $DAEMON || exit 1
+set -e
+case "$1" in
+    start)
+        echo -n "Starting Akara: "
+        start-stop-daemon -d ${APP_PATH} -c ${RUN_AS} --start --background --pidfile ${PID_FILE} --startas ${DAEMON} -- ${DAEMON_OPTS} start
+        ;;
+    stop)
+        echo -n "Stopping Akara: "
+        start-stop-daemon --stop --pidfile ${PID_FILE}
+        ;;
+    status)
+        ${DAEMON} ${DAEMON_OPTS} status
+        ;;
+    restart|force-reload)
+        echo -n "Restarting Akara: "
+        COMMAND="restart"
+        if [ ! -f "${PID_FILE}" ]; then
+            COMMAND="start"
+        fi
+        ${DAEMON} ${DAEMON_OPTS} ${COMMAND}
+        ;;
+    *)
+        echo "Usage: $0 {start|stop|status|restart|force-reload}" >&2
+        exit 1
+        ;;
+esac
+exit 0
