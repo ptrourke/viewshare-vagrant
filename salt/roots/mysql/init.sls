@@ -86,15 +86,13 @@ mysql_grant_file:
       replication_password: "{{ replication_password }}"
     - require:
       - pkg: mysql-server
-
-mysql_grant_command:
-  cmd.run:
+  cmd.wait:
     - name: mysql -u root < /etc/mysql/grants.sql
-
-mysql_service_restart:
+    - watch:
+      - file: mysql_grant_file
   service:
     - name: mysql
     - running
     - reload: True
     - watch:
-      - cmd: mysql_grant_command
+      - cmd: mysql_grant_file
