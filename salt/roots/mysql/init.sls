@@ -88,10 +88,7 @@ mysql_grant_file:
       - pkg: mysql-server
 
 mysql_grant_command:
-  service.running:
-    - name: mysql
-    - reload: True
-  cmd.wait:
+  cmd.run:
     - name: mysql -u root < /etc/mysql/grants.sql
 
 mysql_service_restart:
