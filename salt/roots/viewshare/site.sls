@@ -53,5 +53,15 @@ viewshare_virtualenv:
       - user
       - group
       - mode
-    - require:
-      - virtualenv: viewshare_virtualenv
+
+/srv/viewshare/shared/viewshare_site_settings.py:
+  file.managed:
+    - source: salt://viewshare/viewshare_site_settings.py
+    - user: nobody
+    - group: nogroup
+    - dir_mode: 755
+    - template: jinja
+    - context:
+      client_password: "{{ client_password }}"
+      akara_url: "{{ pillar.get('akara_url', 'http://localhost:8881') }}"
+      secret_key: "{{ pillar.get('secret_key', salt['cmd.run']('openssl rand -base64 64')) }}"
