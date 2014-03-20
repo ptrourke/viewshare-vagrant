@@ -3,6 +3,23 @@ include:
   - viewshare-dependencies
 
 {% set root_password, client_password, replication_password = salt['cmd.run']('cat /etc/mysql/saltstore').split() %}
+{% set rabbitmq_user_pass = pillar.get('rabbitmq_user_pass', salt['cmd.run']('openssl rand -base64 12')) %}
+
+rabbitmq_viewshare_vhost:
+  rabbitmq_vhost.present:
+    - name: viewshare
+
+rabbitmq_viewshare_user:
+  rabbitmq_user.present:
+    - name: viewshare_user
+    - password: {{ rabbitmq_user_pass }}
+    - perms:
+      - '/viewshare':
+        - '.*'
+        - '.*'
+        - '.*'
+    - require:
+      - rabbitmq_vhost: rabbitmq_viewshare_vhost
 
 /var/www/cache/tmp:
   file.directory:
@@ -65,3 +82,18 @@ viewshare_virtualenv:
       client_password: "{{ client_password }}"
       akara_url: "{{ pillar.get('akara_url', 'http://localhost:8881') }}"
       secret_key: "{{ pillar.get('secret_key', salt['cmd.run']('openssl rand -base64 64')) }}"
+      smtp_host: "{{ pillar.get('smtp_host', '') }}"
+      smtp_user: "{{ pillar.get('smtp_user', '') }}"
+      smtp_password: "{{ pillar.get('smtp_password', '') }}"
+      uservoice_account_key: "{{ pillar.get('uservoice_account_key', '') }}"
+      uservoice_sso_key: "{{ pillar.get('uservoice_sso_key', '') }}"
+
+/srv/viewshare/shared/celeryconfig.py:
+  file.managed:
+    - source: salt://viewshare/celeryconfig.py
+    - user: nobody
+    - group: nogroup
+    - dir_mode: 755
+    - template: jinja
+    - context:
+      rabbitmq_user_pass: "{{ rabbitmq_user_pass }}"

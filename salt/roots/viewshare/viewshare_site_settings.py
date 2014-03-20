@@ -58,3 +58,35 @@ SITE_NAME_STATUS = ''
 CELERY_ALWAYS_EAGER = False
 SIMILE_PAINTER_SERVICE_URL = 'http://viewshare.org/painter'
 ALLOWED_HOSTS = ('viewshare.org',)
+
+{% if smtp_host %}
+EMAIL_CONFIRMATION_DAYS = 2
+EMAIL_DEBUG = DEBUG
+EMAIL_HOST = '{{ smtp_host }}'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '{{ smtp_user }}'
+EMAIL_HOST_PASSWORD = '{{ smtp_password }}'
+EMAIL_USE_TLS = True
+{% endif %}
+
+CONTACT_EMAIL = 'ndiippaccess@loc.gov'
+USER_APPROVAL_EMAIL_LIST=('ndiippaccess@loc.gov',)
+DEFAULT_FROM_EMAIL = 'ndiippaccess@loc.gov'
+USER_REGISTRATION_FROM_EMAIL = 'ndiippaccess@loc.gov'
+
+{% if uservoice_account_key %}
+USERVOICE_SETTINGS = {
+    'ACCOUNT_KEY':'{{ uservoice_account_key }}',
+    'HOST': 'viewshare.uservoice.com',
+    'FORUM': '152959',
+    'SSO_KEY': '{{ uservoice_sso_key }}',
+    'support_queues': {
+        'ignored_fields': 'Ignored Data',
+        'augmentation': 'Augmentation',
+        'upload': 'Data Load'
+    }
+}
+
+SUPPORT_BACKEND = 'viewshare.apps.support.backends.uservoice.UservoiceSupportBackend'
+SUPPORT_USER = 'support'
+{% endif %}

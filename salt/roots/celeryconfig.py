@@ -1,0 +1,5 @@
+BROKER_TRANSPORT = 'amqp'
+BROKER_HOST = '127.0.0.1'
+BROKER_USER = 'viewshare_user'
+BROKER_PASSWORD = '{{ rabbitmq_user_pass }}'
+BROKER_VHOST = '/viewshare'
