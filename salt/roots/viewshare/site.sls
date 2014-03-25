@@ -47,7 +47,7 @@ rabbitmq_viewshare_user:
 
 viewshare_site_repo:
   git.latest:
-    - name: https://github.com/zepheira/viewshare_site.git
+    - name: https://github.com/wamberg/viewshare_site.git
     - rev: master
     - target: /srv/viewshare/current
     - require:
@@ -97,3 +97,26 @@ viewshare_virtualenv:
     - template: jinja
     - context:
       rabbitmq_user_pass: "{{ rabbitmq_user_pass }}"
+
+/srv/viewshare/current/viewshare_site_settings.py:
+  file.symlink:
+    - target: /srv/viewshare/shared/viewshare_site_settings.py
+    - require:
+      - file: /srv/viewshare/shared/viewshare_site_settings.py
+
+/srv/viewshare/current/celeryconfig.py:
+  file.symlink:
+    - target: /srv/viewshare/shared/celeryconfig.py
+    - require:
+      - file: /srv/viewshare/shared/celeryconfig.py
+
+django.syncdb:
+  module.run:
+    - settings_module: viewshare_site.settings
+    - bin_env: /srv/viewshare/shared/env/bin/django-admin.py
+    - env: /srv/viewshare/shared/env
+    - pythonpath: /srv/viewshare/current
+    - migrate: true
+    - require:
+      - file: /srv/viewshare/current/viewshare_site_settings.py
+      - file: /srv/viewshare/current/celeryconfig.py
