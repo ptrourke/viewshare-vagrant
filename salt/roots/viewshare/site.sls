@@ -120,3 +120,13 @@ django.syncdb:
     - require:
       - file: /srv/viewshare/current/viewshare_site_settings.py
       - file: /srv/viewshare/current/celeryconfig.py
+
+django.collectstatic:
+  module.run:
+    - settings_module: viewshare_site.settings
+    - bin_env: /srv/viewshare/shared/env/bin/django-admin.py
+    - env: /srv/viewshare/shared/env
+    - pythonpath: /srv/viewshare/current
+    - require:
+      - file: /srv/viewshare/current/viewshare_site_settings.py
+      - file: /srv/viewshare/current/celeryconfig.py
