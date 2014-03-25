@@ -50,6 +50,7 @@ viewshare_site_repo:
     - name: https://github.com/wamberg/viewshare_site.git
     - rev: master
     - target: /srv/viewshare/current
+    - force_checkout: true
     - require:
       - file: /srv/viewshare
 
@@ -76,7 +77,7 @@ viewshare_virtualenv:
     - source: salt://viewshare/viewshare_site_settings.py
     - user: nobody
     - group: nogroup
-    - dir_mode: 755
+    - mode: 755
     - template: jinja
     - context:
       client_password: "{{ client_password }}"
@@ -93,7 +94,7 @@ viewshare_virtualenv:
     - source: salt://viewshare/celeryconfig.py
     - user: nobody
     - group: nogroup
-    - dir_mode: 755
+    - mode: 755
     - template: jinja
     - context:
       rabbitmq_user_pass: "{{ rabbitmq_user_pass }}"
@@ -130,3 +131,25 @@ django.collectstatic:
     - require:
       - file: /srv/viewshare/current/viewshare_site_settings.py
       - file: /srv/viewshare/current/celeryconfig.py
+
+/etc/nginx/sites-available/viewshare.conf:
+  file.managed:
+    - source: salt://viewshare/nginx_viewshare.conf
+    - user: root
+    - group: root
+    - mode: 755
+
+/etc/nginx/sites-enabled/viewshare.conf:
+  file.symlink:
+    - target: /etc/nginx/sites-available/viewshare.conf
+    - require:
+      - file: /etc/nginx/sites-available/viewshare.conf
+
+nginx_service:
+  service:
+    - name: nginx
+    - running
+    - enable: True
+    - reload: True
+    - watch:
+      - file: /etc/nginx/sites-enabled/viewshare.conf

@@ -1,4 +1,4 @@
 include:
   - viewshare.database
   - viewshare.site
-  - viewshare.gunicorn
+  - viewshare.supervisor

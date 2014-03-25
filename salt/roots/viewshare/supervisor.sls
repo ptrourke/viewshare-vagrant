@@ -5,6 +5,9 @@ include:
 supervisor:
   pip.installed
 
+celery==3.0:
+  pip.installed
+
 /etc/supervisor.d:
   file.directory:
     - user: root
@@ -60,6 +63,13 @@ supervisor:
     - group: adm
     - mode: 755
 
+/etc/supervisor.d/viewshare-celeryd.conf:
+  file.managed:
+    - source: salt://viewshare/viewshare-celeryd.conf
+    - user: root
+    - group: adm
+    - mode: 755
+
 supervisor_service:
   service:
     - name: supervisor
@@ -75,3 +85,12 @@ supervisorctl_viewshare:
     - running
     - watch:
       - file: /etc/supervisor.d/viewshare.conf
+
+supervisorctl_celeryd:
+  supervisord:
+    - name: viewshare-celeryd
+    - running
+    - watch:
+      - file: /etc/supervisor.d/viewshare-celeryd.conf
+    - require:
+      - pip.installed: celery==3.0
