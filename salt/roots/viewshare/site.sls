@@ -2,7 +2,6 @@ include:
   - viewshare.database
   - viewshare-dependencies
 
-{% set root_password, client_password, replication_password = salt['cmd.run']('cat /etc/mysql/saltstore').split() %}
 {% set rabbitmq_user_pass = pillar.get('rabbitmq_user_pass', salt['cmd.run']('openssl rand -base64 12')) %}
 
 rabbitmq_viewshare_vhost:
@@ -80,7 +79,7 @@ viewshare_virtualenv:
     - mode: 755
     - template: jinja
     - context:
-      client_password: "{{ client_password }}"
+      client_password: {{ pillar.get('client_password', 'client_password') }}
       akara_url: "{{ pillar.get('akara_url', 'http://localhost:8881') }}"
       secret_key: "{{ pillar.get('secret_key', salt['cmd.run']('openssl rand -base64 64')) }}"
       smtp_host: "{{ pillar.get('smtp_host', '') }}"

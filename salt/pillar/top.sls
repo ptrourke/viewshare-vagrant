@@ -1,4 +1,5 @@
 base:
   '*':
     - akara
+    - mysql
     - viewshare

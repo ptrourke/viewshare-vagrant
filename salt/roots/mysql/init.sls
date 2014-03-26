@@ -1,18 +1,3 @@
-{% if salt['file.file_exists']('/etc/mysql/saltstore') %}
-{% set root_password, client_password, replication_password = salt['cmd.run']('cat /etc/mysql/saltstore').split() %}
-{% else %}
-{% set root_password = pillar.get('root_password', salt['cmd.run']('openssl rand -base64 12')) %}
-{% set client_password = pillar.get('client_password', salt['cmd.run']('openssl rand -base64 12')) %}
-{% set replication_password = pillar.get('replication_password', salt['cmd.run']('openssl rand -base64 12')) %}
-mysql_saltstore:
-  file.managed:
-    - name: /etc/mysql/saltstore
-    - contents: "{{ root_password }}\n{{ client_password }}\n{{ replication_password }}"
-    - mode: 600
-    - user: mysql
-    - group: mysql
-{% endif %}
-
 include:
   - viewshare-dependencies
 
@@ -32,7 +17,7 @@ mysql_server_seed:
     - user: mysql
     - group: mysql
     - context:
-      root_password: "{{ root_password }}"
+      root_password: {{ pillar.get('root_password', 'root_password') }}
     - require:
       - file.directory: /var/cache/local/preseeding
 
@@ -58,7 +43,7 @@ mysql_debian_conf:
     - user: mysql
     - group: mysql
     - context:
-      client_password: "{{ client_password }}"
+      client_password: {{ pillar.get('client_password', 'client_password') }}
     - require:
       - pkg: mysql-server
 
@@ -81,9 +66,9 @@ mysql_grant_file:
     - user: mysql
     - group: mysql
     - context:
-      root_password: "{{ root_password }}"
-      client_password: "{{ client_password }}"
-      replication_password: "{{ replication_password }}"
+      root_password: {{ pillar.get('root_password', 'root_password') }}
+      client_password: {{ pillar.get('client_password', 'client_password') }}
+      replication_password: {{ pillar.get('replication_password', 'replication_password') }}
     - require:
       - pkg: mysql-server
   cmd.wait:

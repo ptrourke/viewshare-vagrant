@@ -1,4 +1,5 @@
 akara_url: http://localhost:8881
+rabbitmq_user_pass: ""
 secret_key: you probably want to put something here
 smtp_host: email-smtp.us-east-1.amazonaws.com
 smtp_user: awsuser

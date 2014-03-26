@@ -2,8 +2,6 @@ include:
   - mysql
   - viewshare-dependencies
 
-{% set root_password, client_password, replication_password = salt['cmd.run']('cat /etc/mysql/saltstore').split() %}
-
 create_viewshare_database:
   file.managed:
     - name: /etc/mysql/create_database.sql
@@ -13,8 +11,8 @@ create_viewshare_database:
     - user: mysql
     - group: mysql
     - context:
-      client_password: "{{ client_password }}"
+      client_password: {{ pillar.get('client_password', 'client_password') }}
   cmd.wait:
-    - name: mysql -u root -p{{ root_password }} < /etc/mysql/create_database.sql
+    - name: mysql -u root -p{{ pillar.get('root_password', 'root_password') }} < /etc/mysql/create_database.sql
     - watch:
       - file: create_viewshare_database
