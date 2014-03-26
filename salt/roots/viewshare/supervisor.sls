@@ -93,4 +93,4 @@ supervisorctl_celeryd:
     - watch:
       - file: /etc/supervisor.d/viewshare-celeryd.conf
     - require:
-      - pip.installed: celery==3.0
+      - pip: celery==3.0

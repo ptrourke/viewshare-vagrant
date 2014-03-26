@@ -19,7 +19,7 @@ mysql_server_seed:
     - context:
       root_password: {{ pillar.get('root_password', 'root_password') }}
     - require:
-      - file.directory: /var/cache/local/preseeding
+      - file: /var/cache/local/preseeding
 
 debconf_mysql_seed:
   debconf.set_file:
