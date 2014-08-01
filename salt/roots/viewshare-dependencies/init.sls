@@ -28,7 +28,7 @@ nodejs_repo:
   pkgrepo.managed:
     - humanname: NodeJS Repo
     - name: ppa:chris-lea/node.js
-    - dist: raring
+    - dist: trusty
     - file: /etc/apt/sources.list.d/nodejs.list
     - keyid: C7917B12
     - keyserver: keyserver.ubuntu.com

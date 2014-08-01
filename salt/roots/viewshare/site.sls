@@ -13,7 +13,7 @@ rabbitmq_viewshare_user:
     - name: viewshare_user
     - password: {{ rabbitmq_user_pass }}
     - perms:
-      - '/viewshare':
+      - 'viewshare':
         - '.*'
         - '.*'
         - '.*'
@@ -46,7 +46,7 @@ rabbitmq_viewshare_user:
 
 viewshare_site_repo:
   git.latest:
-    - name: https://github.com/wamberg/viewshare_site.git
+    - name: https://github.com/ptrourke/viewshare_site.git
     - rev: master
     - target: /srv/viewshare/current
     - force_checkout: true
